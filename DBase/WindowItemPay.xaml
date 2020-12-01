@@ -1,0 +1,25 @@
+﻿<Window x:Class="DBase.WindowItemPay"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DBase"
+        mc:Ignorable="d"
+        Title="WindowItemPay" Height="450" Width="300" Background="#1F0000">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*"/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <ListBox x:Name="Pays" Margin="10 10 10 10" Grid.Row="0" SelectionChanged="Pays_SelectionChanged"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBox x:Name="Pay" Margin="10 20 10 20" Width="200" Height="50" SelectionChanged="Pay_SelectionChanged"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Content="Ok" Margin="10 10 10 10" Width="100" Height="50" Click="Button_Click"/>
+            <Button Content="Cancel" Margin="10 10 10 10" Width="100" Height="50" Click="Button_Click_1"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -35,5 +35,11 @@ namespace DBase
             WindowStaff window = new WindowStaff();
             window.Show();
         }
+
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+            WindowItemPay window = new WindowItemPay();
+            window.Show();
+        }
     }
 }

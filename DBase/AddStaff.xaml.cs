@@ -24,6 +24,18 @@ namespace DBase
             InitializeComponent();
         }
 
+        public AddStaff(Staff staff)
+        {
+            InitializeComponent();
+            Name.Text = staff.Name;
+            LastName.Text = staff.Lastname;
+            Surname.Text = staff.Surname;
+            Birthday.SelectedDate = staff.Birthday;
+            Phone.Text = staff.Phone;
+            Post.Text = staff.Post;
+            Type_Post.Text = staff.Type_post;
+            DateInput.SelectedDate = staff.Date_input;
+        }
         private void OK_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
@@ -54,7 +66,7 @@ namespace DBase
 
         public string PhoneStaff
         {
-            get { return Post.Text; }
+            get { return Phone.Text; }
         }
 
         public string PostStaff
