@@ -13,9 +13,9 @@ namespace DBase
         }
 
         public virtual DbSet<Items_pay> Items_pay { get; set; }
+        public virtual DbSet<Pay> Pay { get; set; }
         public virtual DbSet<Staff> Staff { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
-        public virtual DbSet<Pay> Pay { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -24,14 +24,14 @@ namespace DBase
                 .WithRequired(e => e.Items_pay)
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<Pay>()
+                .Property(e => e.Sum_pay)
+                .HasPrecision(19, 4);
+
             modelBuilder.Entity<Staff>()
                 .HasMany(e => e.Pay)
                 .WithRequired(e => e.Staff)
                 .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Pay>()
-                .Property(e => e.Sum_pay)
-                .HasPrecision(19, 4);
         }
     }
 }

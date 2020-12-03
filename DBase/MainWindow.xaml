@@ -16,6 +16,7 @@
             <MenuItem Header="Таблицы">
                 <MenuItem Header="Работник" Click="MenuItem_Click_1" ></MenuItem>
                 <MenuItem Header="Детали" Click="MenuItem_Click_2" ></MenuItem>
+                <MenuItem Header="Зарплата" Click="MenuItem_Click_3"></MenuItem>
                 <MenuItem Header="Выход" Click="MenuItem_Click" ></MenuItem>
             </MenuItem>
         </Menu>

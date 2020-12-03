@@ -66,6 +66,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddPay.xaml.cs">
+      <DependentUpon>AddPay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AddStaff.xaml.cs">
       <DependentUpon>AddStaff.xaml</DependentUpon>
     </Compile>
@@ -77,9 +80,16 @@
     <Compile Include="WindowItemPay.xaml.cs">
       <DependentUpon>WindowItemPay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WindowPay.xaml.cs">
+      <DependentUpon>WindowPay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WindowStaff.xaml.cs">
       <DependentUpon>WindowStaff.xaml</DependentUpon>
     </Compile>
+    <Page Include="AddPay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AddStaff.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -97,6 +107,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="WindowItemPay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowPay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

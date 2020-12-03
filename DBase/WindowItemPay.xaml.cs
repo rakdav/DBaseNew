@@ -81,7 +81,19 @@ namespace DBase
 
         private void Pay_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            val = true;..
+            val = true;
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            using (ModelDB db = new ModelDB())
+            {
+                string pay = Pay.Text;
+                Items_pay items = db.Items_pay.Where(p => p.Item_pay.Equals(pay)).FirstOrDefault();
+                db.Entry(items).State = EntityState.Deleted;
+                db.SaveChanges();
+                UpdateUI();
+            }
         }
     }
 }

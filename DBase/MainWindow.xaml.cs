@@ -41,5 +41,11 @@ namespace DBase
             WindowItemPay window = new WindowItemPay();
             window.Show();
         }
+
+        private void MenuItem_Click_3(object sender, RoutedEventArgs e)
+        {
+            WindowPay window = new WindowPay();
+            window.Show();
+        }
     }
 }
