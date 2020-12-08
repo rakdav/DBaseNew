@@ -23,9 +23,26 @@ namespace DBase
         public MainWindow()
         {
             InitializeComponent();
+            using (ModelDB db=new ModelDB())
+            {
+
+                    var result = from pay in db.Pay orderby pay.Pay_day descending
+                                 join staff in db.Staff on pay.T_number equals staff.T_number
+                                 join pay_item in db.Items_pay on pay.Code_items equals pay_item.Code_Items
+                                 select new
+                                 {
+                                     ID=pay.T_number,
+                                     Code = pay.id_pay,
+                                     FIO = staff.Surname + " " + staff.Name + " " + staff.Lastname,
+                                     PostStaff=staff.Post,
+                                     DatePay = pay.Pay_day,
+                                     Summa = db.Pay.Where(p=>p.Pay_day==pay.Pay_day&&p.T_number==staff.T_number).Sum(p=>p.Sum_pay)
+                                 };
+                    ZP.ItemsSource = result.GroupBy(p=>p.ID).ToList();
+            }
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void MenuItem_Click(object sender, RoutedEventArgs e) 
         {
             this.Close();
         }
@@ -46,6 +63,12 @@ namespace DBase
         {
             WindowPay window = new WindowPay();
             window.Show();
+        }
+
+        private void ZP_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string a=ZP.SelectedValue.ToString();
+            string st = a.ToString();
         }
     }
 }

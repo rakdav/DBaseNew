@@ -81,7 +81,7 @@ namespace DBase
 
         private void Pay_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            val = true;
+            if(Pays.SelectedIndex!=-1) val = true;
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)

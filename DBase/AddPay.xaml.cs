@@ -52,10 +52,11 @@ namespace DBase
         {
             using(ModelDB db=new ModelDB())
             {
-                string value = Staffs.Text;
-                string firstname = value.Split(' ')[0];
-                string name = value.Split(' ')[1];
-                string lastname= value.Split(' ')[2];
+                string value = Staffs.Text.Trim();
+                string[] vs = value.Split(' ');
+                string firstname = vs[0];
+                string name = vs[1];
+                string lastname= vs[2];
                 Staff st = db.Staff.Where(p => p.Surname.Equals(firstname) &&
                                           p.Name.Equals(name) &&
                                           p.Lastname.Equals(lastname)).FirstOrDefault();
