@@ -23,25 +23,31 @@ namespace DBase
         public MainWindow()
         {
             InitializeComponent();
-            using (ModelDB db=new ModelDB())
-            {
-
-                    var result = from pay in db.Pay orderby pay.Pay_day descending
-                                 join staff in db.Staff on pay.T_number equals staff.T_number
-                                 join pay_item in db.Items_pay on pay.Code_items equals pay_item.Code_Items
-                                 select new
-                                 {
-                                     ID=pay.T_number,
-                                     Code = pay.id_pay,
-                                     FIO = staff.Surname + " " + staff.Name + " " + staff.Lastname,
-                                     PostStaff=staff.Post,
-                                     DatePay = pay.Pay_day,
-                                     Summa = db.Pay.Where(p=>p.Pay_day==pay.Pay_day&&p.T_number==staff.T_number).Sum(p=>p.Sum_pay)
-                                 };
-                    ZP.ItemsSource = result.GroupBy(p=>p.ID).ToList();
-            }
+            UpdateUI();
         }
 
+        private void UpdateUI()
+        {
+            using (ModelDB db = new ModelDB())
+            {
+
+                var result = from pay in db.Pay orderby pay.Pay_day descending
+                             join staff in db.Staff on pay.T_number equals staff.T_number
+                             join pay_item in db.Items_pay on pay.Code_items equals pay_item.Code_Items
+                             select new ClassPay
+                             {
+                                 ID = pay.T_number,
+                                 Code = pay.id_pay,
+                                 FIO = staff.Surname + " " + staff.Name + " " + staff.Lastname,
+                                 PostStaff = staff.Post,
+                                 DatePay = pay.Pay_day,
+                                 Summa=pay.Sum_pay
+                             };
+
+                ZP.ItemsSource = result.GroupBy(p=>new {p.ID,p.Summa}).Select(g=>new {ID=g.Key,Summa=g.Sum(e=>e.Summa)});
+
+            }
+        }
         private void MenuItem_Click(object sender, RoutedEventArgs e) 
         {
             this.Close();
@@ -63,12 +69,31 @@ namespace DBase
         {
             WindowPay window = new WindowPay();
             window.Show();
+            UpdateUI();
         }
 
         private void ZP_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string a=ZP.SelectedValue.ToString();
-            string st = a.ToString();
+            var l = (IEnumerable<IGrouping<int, ClassPay>>)ZP.ItemsSource;
+            List<ClassPay> list = l.Where(p => ((IGrouping<int,ClassPay>)ZP.SelectedItem).Any(x=>p.Key==x.ID)).SelectMany(x=>x).ToList();
+            int id = list[0].ID;
+            DateTime? d = list[0].DatePay;
+            using (ModelDB db = new ModelDB())
+            {
+                var result = from pay in db.Pay
+                             join staff in db.Staff on pay.T_number equals staff.T_number
+                             join pay_item in db.Items_pay on pay.Code_items equals pay_item.Code_Items where pay.T_number==id&&pay.Pay_day==d
+                             select new
+                             {
+                                 Code = pay.id_pay,
+                                 FIO = staff.Surname + " " + staff.Name + " " + staff.Lastname,
+                                 PayItem = pay_item.Item_pay,
+                                 DatePay = pay.Pay_day,
+                                 Summa = pay.Sum_pay
+                             };
+                PaysTable.ItemsSource = result.ToList();
+            }
+
         }
     }
 }

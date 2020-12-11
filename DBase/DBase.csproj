@@ -72,6 +72,7 @@
     <Compile Include="AddStaff.xaml.cs">
       <DependentUpon>AddStaff.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ClassPay.cs" />
     <Compile Include="Items_pay.cs" />
     <Compile Include="ModelDB.cs" />
     <Compile Include="Pay.cs" />

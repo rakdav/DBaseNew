@@ -40,9 +40,10 @@
                 <DataGridTextColumn Binding="{Binding Summa}" Header="Сумма" Width="200"/>
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid x:Name="PaysTable" Grid.Row="3" AutoGenerateColumns="False" Margin="10 10 10 10" IsReadOnly="True" >
+      
+        <DataGrid x:Name="PaysTable" Grid.Row="3" AutoGenerateColumns="False" Margin="10 10 10 10" IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Code}" Width="200" Visibility="Collapsed" />
+                <DataGridTextColumn Binding="{Binding Code}" Width="200" Visibility="Collapsed"/>
                 <DataGridTextColumn Binding="{Binding FIO}" Header="ФИО" Width="200"/>
                 <DataGridTextColumn Binding="{Binding PayItem}" Header="Вид начисления" Width="200"/>
                 <DataGridTextColumn Binding="{Binding DatePay}" Header="Дата начисления" Width="200"/>
