@@ -9,7 +9,6 @@ namespace DBase
     class ClassPay
     {
         public int ID { get; set; }
-        public int Code { get; set; }
         public string FIO { get; set; }
         public string PostStaff { get; set; }
         public DateTime? DatePay { get; set; }

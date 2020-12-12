@@ -24,28 +24,35 @@ namespace DBase
         {
             InitializeComponent();
             UpdateUI();
+            using (ModelDB db = new ModelDB())
+            {
+                List<Staff> list = db.Staff.ToList();
+                foreach(Staff i in list)
+                {
+                    Person.Items.Add(i.Surname+" "+i.Name+" "+i.Lastname);
+                }
+            }
         }
 
         private void UpdateUI()
         {
             using (ModelDB db = new ModelDB())
-            {
-
-                var result = from pay in db.Pay orderby pay.Pay_day descending
-                             join staff in db.Staff on pay.T_number equals staff.T_number
-                             join pay_item in db.Items_pay on pay.Code_items equals pay_item.Code_Items
-                             select new ClassPay
-                             {
-                                 ID = pay.T_number,
-                                 Code = pay.id_pay,
-                                 FIO = staff.Surname + " " + staff.Name + " " + staff.Lastname,
-                                 PostStaff = staff.Post,
-                                 DatePay = pay.Pay_day,
-                                 Summa=pay.Sum_pay
-                             };
-
-                ZP.ItemsSource = result.GroupBy(p=>new {p.ID,p.Summa}).Select(g=>new {ID=g.Key,Summa=g.Sum(e=>e.Summa)});
-
+            { 
+                var res = from pay in db.Pay
+                          group pay by new { pay.T_number, pay.Pay_day } into g
+                          orderby g.Key.Pay_day descending
+                          select new ClassPay
+                          {
+                              ID = g.Key.T_number,
+                              DatePay = g.Key.Pay_day,
+                              Summa = g.Sum(e => e.Sum_pay),
+                              FIO = db.Staff.Where(p => p.T_number == g.Key.T_number).FirstOrDefault().Surname+" "+
+                                    db.Staff.Where(p => p.T_number == g.Key.T_number).FirstOrDefault().Name+" "+
+                                    db.Staff.Where(p => p.T_number == g.Key.T_number).FirstOrDefault().Lastname,
+                              PostStaff=db.Staff.Where(p => p.T_number == g.Key.T_number).FirstOrDefault().Post
+                          };
+                ZP.ItemsSource = res.ToList();
+                
             }
         }
         private void MenuItem_Click(object sender, RoutedEventArgs e) 
@@ -74,15 +81,15 @@ namespace DBase
 
         private void ZP_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var l = (IEnumerable<IGrouping<int, ClassPay>>)ZP.ItemsSource;
-            List<ClassPay> list = l.Where(p => ((IGrouping<int,ClassPay>)ZP.SelectedItem).Any(x=>p.Key==x.ID)).SelectMany(x=>x).ToList();
-            int id = list[0].ID;
-            DateTime? d = list[0].DatePay;
+            ClassPay l = (ClassPay)ZP.SelectedItem;
+            int id = l.ID;
+            DateTime? d =l.DatePay;
             using (ModelDB db = new ModelDB())
             {
                 var result = from pay in db.Pay
                              join staff in db.Staff on pay.T_number equals staff.T_number
-                             join pay_item in db.Items_pay on pay.Code_items equals pay_item.Code_Items where pay.T_number==id&&pay.Pay_day==d
+                             join pay_item in db.Items_pay on pay.Code_items equals pay_item.Code_Items
+                             where pay.T_number == id && pay.Pay_day == d
                              select new
                              {
                                  Code = pay.id_pay,
@@ -94,6 +101,36 @@ namespace DBase
                 PaysTable.ItemsSource = result.ToList();
             }
 
+        }
+
+        private void Person_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ZP.ItemsSource = null;
+            using (ModelDB db = new ModelDB())
+            {
+                string fio = Person.Items[Person.SelectedIndex].ToString();
+                string[] par = fio.Split(' ');
+                string sn = par[0];
+                string name = par[1];
+                string last = par[2];
+                int id = db.Staff.Where(p => p.Name.Equals(name) && p.Surname.Equals(sn) && p.Lastname.Equals(last)).FirstOrDefault().T_number;
+                var res = from pay in db.Pay
+                          group pay by new { pay.T_number, pay.Pay_day } into g
+                          where g.Key.T_number==id
+                          orderby g.Key.Pay_day descending
+                          select new ClassPay
+                          {
+                              ID = g.Key.T_number,
+                              DatePay = g.Key.Pay_day,
+                              Summa = g.Sum(l => l.Sum_pay),
+                              FIO = db.Staff.Where(p => p.T_number == g.Key.T_number).FirstOrDefault().Surname + " " +
+                                    db.Staff.Where(p => p.T_number == g.Key.T_number).FirstOrDefault().Name + " " +
+                                    db.Staff.Where(p => p.T_number == g.Key.T_number).FirstOrDefault().Lastname,
+                              PostStaff = db.Staff.Where(p => p.T_number == g.Key.T_number).FirstOrDefault().Post
+                          };
+                ZP.ItemsSource = res.ToList();
+
+            }
         }
     }
 }
